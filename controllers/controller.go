@@ -30,6 +30,7 @@ const queryCode string = `
 {
 	getAll(func: has(Code)) {
 		uid
+		CodePython
 		Code
 	}
 }
@@ -39,7 +40,7 @@ func Add(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Content-Type", "application/json")
 	var rawCode models.Code
 	_ = json.NewDecoder(r.Body).Decode(&rawCode)
-	 p := models.Code { Code: rawCode.Code }
+	 p := models.Code { Code: rawCode.Code, CodePython:rawCode.CodePython }
 	pb, err := json.Marshal(p)
 	if err != nil {
 		log.Fatal(err)
