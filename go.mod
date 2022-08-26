@@ -3,10 +3,13 @@ module backend
 go 1.18
 
 require (
+	github.com/ajg/form v1.5.1 // indirect
 	github.com/dgraph-io/dgo/v2 v2.2.0 // indirect
 	github.com/dgraph-io/dgo/v200 v200.0.0-20210401091508-95bfd74de60e // indirect
+	github.com/dgraph-io/dgo/v210 v210.0.0-20220113041351-ba0e5dfc4c3e // indirect
 	github.com/go-chi/chi v1.5.4 // indirect
 	github.com/go-chi/cors v1.2.1 // indirect
+	github.com/go-chi/render v1.0.2 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
