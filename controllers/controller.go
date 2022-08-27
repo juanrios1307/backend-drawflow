@@ -16,14 +16,13 @@ import(
 
 func GetAll(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Content-Type", "application/json")
-	 dgClient := configs.NewClient()
-	 txn := dgClient.NewTxn()
-	 resp , err := txn.Query(context.Background(), queryCode)
+	dgClient := configs.NewClient()
+	txn := dgClient.NewTxn()
+	resp , err := txn.Query(context.Background(), queryCode)
 
-	 if err != nil {
-	 	log.Fatal(err)
-	 }
-	 println(resp.Json)
+	if err != nil {
+		log.Fatal(err)
+	}
 	w.Write(resp.Json)
 }
 
@@ -41,11 +40,12 @@ func Add(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Content-Type", "application/json")
 	var rawCode models.Code
 	_ = json.NewDecoder(r.Body).Decode(&rawCode)
-	 p := models.Code { Code: rawCode.Code, CodePython:rawCode.CodePython }
+	p := models.Code { Code: rawCode.Code, CodePython:rawCode.CodePython }
 	pb, err := json.Marshal(p)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	dgClient := configs.NewClient()
 	txn := dgClient.NewTxn()
 
@@ -53,13 +53,14 @@ func Add(w http.ResponseWriter, r *http.Request){
 		CommitNow: true,
 		SetJson: pb,
 	}
+
 	resp , err := txn.Mutate(context.Background(), mutBuyers)
 
 	if err != nil {
 		log.Fatal(err)
 	}
-	println(resp.Json)
-	 w.Write(resp.Json)
+	
+	w.Write(resp.Json)
 
 }
 
@@ -72,8 +73,6 @@ func GetOne(w http.ResponseWriter, r *http.Request){
 
 	if id := chi.URLParam(r, "id"); id != "" {
 		query := getQuery(id)
-		
-		println(query)
 		dgClient := configs.NewClient()
 		txn := dgClient.NewTxn()
 		resp , err := txn.Query(context.Background(), query)
@@ -82,16 +81,15 @@ func GetOne(w http.ResponseWriter, r *http.Request){
 			log.Fatal(err)
 		}
 		w.Write(resp.Json)
-	 } else {
+	} else {
 		w.WriteHeader(http.StatusNotFound)
 		return
-	 }
+	}
 
 	
 }
 
 func getQuery( uid string )string{
-	fmt.Print("UID: ",uid)
 	return fmt.Sprintf(getFileWithId,uid )
 }
 
