@@ -9,6 +9,7 @@ import(
 	"fmt"
 	"golang.org/x/net/context"
 	"github.com/dgraph-io/dgo/v210/protos/api"
+	"github.com/go-chi/chi"
 )
 
 
@@ -68,18 +69,29 @@ func GetOne(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Content-Type", "application/json")
 	var rawCode models.Code 
 	_ = json.NewDecoder(r.Body).Decode(&rawCode)
-	query := getQuery(rawCode.Uid)
-	dgClient := configs.NewClient()
-	txn := dgClient.NewTxn()
-	resp , err := txn.Query(context.Background(), query)
 
-	if err != nil {
-		log.Fatal(err)
-	}
-	w.Write(resp.Json)
+	if id := chi.URLParam(r, "id"); id != "" {
+		query := getQuery(id)
+		
+		println(query)
+		dgClient := configs.NewClient()
+		txn := dgClient.NewTxn()
+		resp , err := txn.Query(context.Background(), query)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+		w.Write(resp.Json)
+	 } else {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	 }
+
+	
 }
 
 func getQuery( uid string )string{
+	fmt.Print("UID: ",uid)
 	return fmt.Sprintf(getFileWithId,uid )
 }
 
@@ -88,10 +100,7 @@ const getFileWithId string = `
 	node(func: uid(%s)) {
 	  uid
 	  Code
-	  expand(_all_) {
-		uid
-		expand(_all_)
-	  }
+	  CodePython
 	}
-  }
+}
   `
