@@ -3,6 +3,7 @@ module backend
 go 1.18
 
 require (
+	github.com/DataDog/go-python3 v0.0.0-20211102160307-40adc605f1fe // indirect
 	github.com/ajg/form v1.5.1 // indirect
 	github.com/dgraph-io/dgo/v2 v2.2.0 // indirect
 	github.com/dgraph-io/dgo/v200 v200.0.0-20210401091508-95bfd74de60e // indirect

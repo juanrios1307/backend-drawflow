@@ -28,6 +28,7 @@ func main() {
 	r.Route("/" , func(r chi.Router){
 		r.Get("/" , controllers.GetAll)
 		r.Post("/" , controllers.Add)
+		r.Get("/exec",controllers.Execute)
 		r.Route("/{id}", func(r chi.Router){
 			r.Get("/", controllers.GetOne)
 		})

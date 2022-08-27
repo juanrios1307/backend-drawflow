@@ -10,6 +10,8 @@ import(
 	"golang.org/x/net/context"
 	"github.com/dgraph-io/dgo/v210/protos/api"
 	"github.com/go-chi/chi"
+	"github.com/DataDog/go-python3"
+	"os/exec"
 )
 
 
@@ -102,3 +104,23 @@ const getFileWithId string = `
 	}
 }
   `
+
+func Execute(w http.ResponseWriter, r *http.Request){
+	
+
+	/*defer python3.Py_Finalize()
+ 	python3.Py_Initialize()
+ 	python3.PyRun_SimpleString("print('hello world')")*/
+
+	cmd := exec.Command("python","script.py")
+	out, err := cmd.Output()
+
+	if err != nil {
+		json.NewEncoder(w).Encode("Syntaxis error")
+
+		return
+	}
+	json.NewEncoder(w).Encode(string(out))
+	fmt.Println(string(out))
+	w.Write(out)
+}
