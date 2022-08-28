@@ -10,7 +10,6 @@ import(
 	"golang.org/x/net/context"
 	"github.com/dgraph-io/dgo/v210/protos/api"
 	"github.com/go-chi/chi"
-	"github.com/DataDog/go-python3"
 	"os/exec"
 )
 
@@ -18,6 +17,9 @@ import(
 
 func GetAll(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Content-Type", "application/json")
+
+	fmt.Println("Obtener todos los Programas")
+
 	dgClient := configs.NewClient()
 	txn := dgClient.NewTxn()
 	resp , err := txn.Query(context.Background(), queryCode)
@@ -40,6 +42,9 @@ const queryCode string = `
 
 func Add(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Content-Type", "application/json")
+
+	fmt.Println("Guardar Programa")
+
 	var rawCode models.Code
 	_ = json.NewDecoder(r.Body).Decode(&rawCode)
 	p := models.Code { Code: rawCode.Code, CodePython:rawCode.CodePython }
@@ -70,6 +75,9 @@ func Add(w http.ResponseWriter, r *http.Request){
 
 func GetOne(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Content-Type", "application/json")
+	
+	fmt.Println("Obtener 1 programa")
+
 	var rawCode models.Code 
 	_ = json.NewDecoder(r.Body).Decode(&rawCode)
 
@@ -107,20 +115,19 @@ const getFileWithId string = `
 
 func Execute(w http.ResponseWriter, r *http.Request){
 	
+	fmt.Println("Ejecutar codigo")
 
-	/*defer python3.Py_Finalize()
- 	python3.Py_Initialize()
- 	python3.PyRun_SimpleString("print('hello world')")*/
-
-	cmd := exec.Command("python","script.py")
+	cmd := exec.Command("python","/home/juanesrios/script.py")
 	out, err := cmd.Output()
 
 	if err != nil {
+		fmt.Println(err.Error())
 		json.NewEncoder(w).Encode("Syntaxis error")
 
 		return
 	}
+	
 	json.NewEncoder(w).Encode(string(out))
-	fmt.Println(string(out))
+
 	w.Write(out)
 }
