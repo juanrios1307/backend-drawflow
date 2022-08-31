@@ -12,8 +12,10 @@ import (
 
 func main() {
 
+	//Declaración del router en libreria chi
 	r :=chi.NewRouter()
 
+	//Habilita opciones del CORS para permitir conexión con browser 
 	cors := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -23,8 +25,10 @@ func main() {
 		MaxAge:           300, 
 	})
 
+	//Router utiliza las opciones del cors
 	r.Use(cors.Handler)
 
+	//Declaración de rutas para ejecutar endpoints
 	r.Route("/" , func(r chi.Router){
 		r.Get("/" , controllers.GetAll)
 		r.Post("/" , controllers.Add)
@@ -34,6 +38,7 @@ func main() {
 		})
 	})
 
+	//Escucha y abre servidor en puerto 9000
 	println("Listen on 9000")
 	http.ListenAndServe(":9000", r)
 }

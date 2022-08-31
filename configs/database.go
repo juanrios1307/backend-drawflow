@@ -1,5 +1,6 @@
 package configs
 
+//Importacion de paquetes
 import (
 	"log"
 
@@ -8,7 +9,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-
+//Creación de conexión a Dgraph
 func NewClient() *dgo.Dgraph {
 	conn, err := grpc.Dial("localhost:9080", grpc.WithInsecure())
 
